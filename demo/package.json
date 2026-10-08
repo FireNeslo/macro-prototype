@@ -1,0 +1,17 @@
+{
+  "name": "solid-jsx-macro-demo",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite"
+  },
+  "dependencies": {
+    "@solidjs/web": "2.0.0-rc.14",
+    "solid-js": "2.0.0-rc.14"
+  },
+  "devDependencies": {
+    "vite": "8.3.4",
+    "vite-plugin-macros": "file:./packages/vite-plugin-macros",
+    "solid-jsx-macro": "file:./packages/solid-jsx-macro"
+  }
+}

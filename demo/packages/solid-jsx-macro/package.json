@@ -1,0 +1,11 @@
+{
+  "name": "solid-jsx-macro",
+  "private": true,
+  "type": "module",
+  "description": "Solid 2 templates compiled by a `jsx!` macro instead of babel-preset-solid",
+  "exports": { ".": "./jsx.ts" },
+  "peerDependencies": {
+    "@solidjs/web": "2.0.0-rc.14",
+    "solid-js": "2.0.0-rc.14"
+  }
+}

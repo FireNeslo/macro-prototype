@@ -1,0 +1,11 @@
+{
+  "name": "oxc-parser",
+  "version": "0.153.0-macros",
+  "type": "module",
+  "main": "src-js/index.js",
+  "dependencies": {
+    "@napi-rs/wasm-runtime": "1.2.4",
+    "@emnapi/core": "2.0.0-alpha.3",
+    "@emnapi/runtime": "2.0.0-alpha.3"
+  }
+}

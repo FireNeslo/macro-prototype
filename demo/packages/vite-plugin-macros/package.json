@@ -1,0 +1,15 @@
+{
+  "name": "vite-plugin-macros",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "dependencies": {
+    "oxc-parser": "file:../oxc-parser",
+    "rolldown": "1.2.13"
+  },
+  "peerDependencies": {
+    "vite": "^8.0.0"
+  }
+}
