@@ -1,6 +1,6 @@
 # Solid 2, compiled by a `jsx!` macro
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/FireNeslo/macro-prototype/tree/main/demo)
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/FireNeslo/macro-prototype/tree/main/demo?file=src%2FApp.ts)
 
 A Solid 2 app whose JSX templates are compiled by a **compile-time macro** (`jsx! { … }`) instead
 of Solid's Babel compiler. It is a prototype for a TC39 strawman on native compile-time macros

@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite"
+    "dev": "node --no-warnings node_modules/vite/bin/vite.js"
   },
   "dependencies": {
     "@solidjs/web": "2.0.0-rc.14",
