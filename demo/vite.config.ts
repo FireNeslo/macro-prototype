@@ -1,7 +1,10 @@
 import { defineConfig } from "vite";
+import solid from "vite-plugin-solid";
 import macros from "vite-plugin-macros";
 
-// No vite-plugin-solid / babel-preset-solid: JSX is compiled by the `jsx!` macro.
+// Templates are compiled by the `jsx!` macro: the app has no JSX for Solid's compiler.
+// Server functions are attribute macros (src/api.ts) that lower to Solid's "use server" forms,
+// which Solid's plugin compiles. Macros run first, so Solid's plugin sees their output.
 export default defineConfig({
-    plugins: [macros()],
+    plugins: [macros(), solid({ serverFunctions: true })],
 });

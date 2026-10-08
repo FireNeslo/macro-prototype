@@ -1,0 +1,10 @@
+{
+  "name": "solid-server-macros",
+  "private": true,
+  "type": "module",
+  "description": "Solid 2 server functions as attribute macros: #[server], #[server(GET)], #[live]",
+  "exports": { ".": "./server.ts" },
+  "peerDependencies": {
+    "@solidjs/web": "2.0.0-rc.14"
+  }
+}
