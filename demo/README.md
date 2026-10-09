@@ -82,10 +82,9 @@ The macro is defined in `packages/solid-jsx-macro/jsx.ts`:
 
 ```ts
 import * as web from "@solidjs/web";
+import { compile } from "./compiler.ts";
 
 export macro jsx(tokens: TokenStream): TokenStream {
-    // A compile-time-only dependency: it never becomes part of the app
-    const { compile } = import.meta.compile.import("./compiler.ts");
     return compile(tokens, {
         runtime: import.meta.compile.identifier(web),
         hoist: (expression, name) => import.meta.compile.hoist(expression, name),
@@ -94,7 +93,8 @@ export macro jsx(tokens: TokenStream): TokenStream {
 ```
 
 `compiler.ts` reads the markup from the tokens and generates the same calls Solid's own compiler
-would. The browser receives this (shortened):
+would. It is imported normally: only the macro uses it, so the plugin drops that import from
+everything that runs in the browser. The browser receives this (shortened):
 
 ```js
 import * as $m_web from "/node_modules/.vite/deps/@solidjs_web.js";

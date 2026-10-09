@@ -6,9 +6,10 @@
 import { TokenStream } from "std:compiler";
 import * as web from "@solidjs/web";
 
+// Only used inside the macro, so the plugin drops this import outside of compilation
+import { compile } from "./compiler.ts";
+
 export macro jsx(tokens: TokenStream): TokenStream {
-    // Compile-time only dependency: not part of the runtime module graph
-    const { compile } = import.meta.compile.import("./compiler.ts") as typeof import("./compiler.ts");
     return compile(tokens, {
         runtime: import.meta.compile.identifier(web),
         hoist: (expression, name) => import.meta.compile.hoist(expression, name),

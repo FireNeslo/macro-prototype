@@ -286,9 +286,11 @@ export async function transformModule(code, id, context) {
 			if (file !== consumer) context.watch(file);
 		}
 	}
-	// Macros only exist at compile time: drop their import specifiers
+	// Macros only exist at compile time: drop their import specifiers. At runtime, also drop imports
+	// that only macro bodies use: they are compile-time dependencies of the macros.
+	const removedImports = phase === "runtime" && analysis.declarations.length > 0 ? new Set([...usedMacroLocals, ...compileTimeImports(program, macroDeclarationNodes)]) : usedMacroLocals;
 	for (const statement of program.body) {
-		if (statement.type === "ImportDeclaration") removeMacroSpecifiers(s, code, statement, usedMacroLocals);
+		if (statement.type === "ImportDeclaration") removeMacroSpecifiers(s, code, statement, removedImports);
 	}
 	// Import bindings captured by `import.meta.compile.identifier()` under their aliases.
 	// Aliases that only named macros (expanded away) are not imported.
@@ -384,6 +386,35 @@ export async function transformModule(code, id, context) {
 		code: s.toString(),
 		map: map.toString()
 	};
+}
+/**
+* Local names of imports that are referenced inside macro declarations and nowhere else. In the
+* runtime build those declarations are removed, so these imports are only needed at compile time.
+* Conservative: any other mention of the name, including in a macro invocation's tokens or as a
+* property key, keeps the import.
+*/
+function compileTimeImports(program, macroDeclarations) {
+	const imported = new Set();
+	for (const statement of program.body) {
+		if (statement.type !== "ImportDeclaration") continue;
+		for (const specifier of statement.specifiers ?? []) imported.add(specifier.local.name);
+	}
+	const inside = new Set();
+	const outside = new Set();
+	const tokenNames = (group) => {
+		for (const token of group?.tokens ?? []) {
+			if (token.type === "MacroIdentToken") outside.add(token.value);
+			else if (token.type === "MacroGroupToken") tokenNames(token);
+		}
+	};
+	walk(program, (node) => {
+		if (node.type === "ImportDeclaration") return false;
+		const inMacro = within(node, macroDeclarations);
+		if (node.type === "Identifier" || node.type === "JSXIdentifier") (inMacro ? inside : outside).add(node.name);
+		if (!inMacro && node.type === "MacroInvocation") tokenNames(node.body);
+		if (!inMacro && node.type === "Attribute") tokenNames(node.arguments);
+	});
+	return [...inside].filter((name) => imported.has(name) && !outside.has(name));
 }
 /** Remove specifiers of macros from an import declaration, or the whole declaration if only macros remain. */
 function removeMacroSpecifiers(s, code, statement, macros) {
